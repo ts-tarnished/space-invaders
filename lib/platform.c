@@ -22,7 +22,7 @@ static Uint64 lastFrame;
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    SDL_SetAppMetadata("Bullet Heaven Demo", "0.1", "bullet-heaven-demo");
+    SDL_SetAppMetadata("Space Invaders Demo", "0.1", "bullet-heaven-demo");
     SDL_SetHint(SDL_HINT_MAIN_CALLBACK_RATE, "60");
     lastFrame = SDL_GetTicksNS();
     game = Game_Init();
@@ -32,7 +32,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    if (!SDL_CreateWindowAndRenderer("Bullet Heaven Demo", game->pixels.width, game->pixels.height, SDL_WINDOW_RESIZABLE, &window, &renderer)) {
+    if (!SDL_CreateWindowAndRenderer("Space Invaders Demo", GAME_WIDTH, GAME_HEIGHT, SDL_WINDOW_RESIZABLE, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
@@ -76,6 +76,13 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 
     switch (game->playingState) {
         case GAME_PLAYING_STATE_PAUSED:
+            if (keyboardState[SDL_SCANCODE_R]) {
+                game = Game_Init();
+                game->playingState = GAME_PLAYING_STATE_PLAYING;
+            }
+            else if (keyboardState[SDL_SCANCODE_SPACE])
+                game->playingState = GAME_PLAYING_STATE_PLAYING;
+           break;
         case GAME_PLAYING_STATE_MENU:
             if (keyboardState[SDL_SCANCODE_SPACE])
                 game->playingState = GAME_PLAYING_STATE_PLAYING;
